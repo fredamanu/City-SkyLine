@@ -1,0 +1,411 @@
+/* That didn't work, because the variables you declared in .bb1 do not cascade to the .bb2 and .bb3 sibling elements. That's just how CSS works. Because of this, variables are often declared in the :root selector. This is the highest level selector in CSS; putting your variables there will make them usable everywhere. Add the :root selector to the top of your stylesheet, and move all your variable declarations there. */
+
+/* To create a variable use --variable-name: value */
+
+:root {
+  --building-color1: #aa80ff;
+  --building-color2: #66cc99;
+  --building-color3: #cc6699;
+  --building-color4: #538cc6;
+  --window-color1: #bb99ff;
+  --window-color2: #8cd9b3;
+  --window-color3: #d98cb3;
+  --window-color4: #8cb3d9;
+}
+
+/* In CSS, you can target everything with an asterisk. Add a border to everything by using the * selector, and giving it a border of 1px solid black. This is a trick that helps visualize where elements are and their size. You can remove this later. */
+
+* {
+  /* After all the buildings are done. Go back to the * selector and remove the border you applied to everything at the beginning and the buildings will come together. */
+
+  /* border: 1px solid black; */
+
+  /* This will make it so the border you added doesn't add any size to your elements. */
+  box-sizing: border-box;
+}
+
+/* At this point, you will see body which is the inner-most box on the page. The box around it is the html element. Make your body fill the whole viewport by giving it a height of 100vh. Remove the default margin from the body by setting the margin to 0. Finally, set the overflow property to hidden to hide any scroll bars that appear when something extends past the viewport. */
+
+body {
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* Use the align-items and justify-content properties to evenly space the buildings across the bottom of the element */
+.foreground-buildings,
+.background-buildings {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 100%;
+  /* You want the .foreground-buildings container to sit directly on top of the .background-buildings element. Give it a width and height of 100%, set the position to absolute, and the top to 0. This will make it the same size as the body and move the start of it to the top left corner. */
+  position: absolute;
+  top: 0;
+}
+
+.background-buildings {
+  /* make it the full width and height of its parent, the body */
+  width: 100%;
+  height: 100%;
+}
+
+.sky {
+  background: radial-gradient(
+    /* This will move the start of the gradient to 15% from the top and left. It will make it end at the closest-corner and it will maintain a circle shape. These are some keywords built into gradients to describe how it behaves. */
+      circle closest-corner at 15% 15%,
+
+    #ffcf33 0%,
+    #ffcf33 20%,
+    #ffff66 21%,
+    #bbeeff 100%
+  );
+}
+
+.building-wrap {
+  /* Center the parts of your building by turning the .bb1 element into a flexbox parent. Use the flex-direction and align-items properties to center the children. */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.window-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+/* BACKGROUND BUILDINGS - "bb" stands for "background building" */
+
+.bb1 {
+  width: 10%;
+  height: 70%;
+}
+
+.bb1-window {
+  height: 10%;
+  background: linear-gradient(var(--building-color1), var(--window-color1));
+}
+
+.bb1a {
+  width: 70%;
+
+  /* To use a variable, put the variable name in parentheses with var in front of them like this: var(--variable-name).  */
+  background-color: var(--building-color1);
+  /* 
+  Gradients in CSS are a way to transition between colors across the distance of an element. They are applied to the background property and the syntax looks like this:
+
+gradient-type(
+  color1,
+  color2
+);
+
+In the example, color1 is solid at the top, color2 is solid at the bottom, and in between it transitions evenly from one to the next */
+}
+
+.bb1b {
+  width: 80%;
+}
+
+.bb1c {
+  width: 90%;
+}
+
+.bb1d {
+  width: 100%;
+  height: 70%;
+
+  /* Here, it will transition from orange to --building-color1 between 0% and 80% of the element and then transition to --window-color1 for the rest.
+  background: linear-gradient(
+    orange,
+    var(--building-color1) 80%,
+    var(--window-color1)
+  ); */
+
+  /* This will make --building-color1 solid for the top half, and then transition to --window-color1 for the bottom half. */
+  background: linear-gradient(var(--building-color1) 50%, var(--window-color1));
+}
+
+.bb2 {
+  width: 10%;
+  height: 50%;
+}
+
+.bb2a {
+  /* Creating a triangle using border */
+
+  /* margin: auto; */
+  /* width: 5vw;
+  height: 5vw; */
+  /* border-top: 1vw solid #000; */
+  border-bottom: 5vh solid var(--building-color2);
+  border-left: 5vw solid transparent;
+  border-right: 5vw solid transparent;
+}
+
+.bb2b {
+  width: 100%;
+  height: 100%;
+
+  /* Gradient transitions often gradually change from one color to another. You can make the change a solid line like this:
+
+  linear-gradient(
+    var(--first-color) 0%,
+    var(--first-color) 40%,
+    var(--second-color) 40%,
+    var(--second-color) 80%
+  ); */
+
+  /* Changing the gradient type from linear-gradient to repeating-linear-gradient makes the four colors of your gradient repeat until it gets to the bottom of the element; giving you some stripes, and saving you from having to add a bunch of elements to create them */
+
+  background: repeating-linear-gradient(
+    var(--building-color2) 0%,
+    var(--building-color2) 6%,
+    var(--window-color2) 6%,
+    var(--window-color2) 9%
+  );
+}
+
+.bb3 {
+  width: 10%;
+  height: 55%;
+
+  /* Top to bottom is the default direction. You can specify another direction by adding it before your colors like this:
+
+  gradient-type(
+    direction,
+    color1,
+    color2
+  );
+  Fill in .bb3 with a repeating-linear-gradient. Use 90deg for the direction, your building-color3 for the first two colors, and window-color3 at 15% for the third. When you don't specify a distance for a color, it will use the values that makes sense. In this case, the first two colors will default to 0% and 7.5% because it starts at 0%, and 7.5% is half of the 15%. */
+
+  background: repeating-linear-gradient(
+    90deg,
+    var(--building-color3),
+    var(--building-color3),
+    var(--window-color3) 15%
+  );
+}
+.bb4 {
+  width: 11%;
+  height: 58%;
+}
+
+.bb4a {
+  width: 3%;
+  height: 10%;
+  background-color: var(--building-color4);
+}
+
+.bb4b {
+  width: 80%;
+  height: 5%;
+  background-color: var(--building-color4);
+}
+
+.bb4c {
+  width: 100%;
+  height: 85%;
+  background-color: var(--building-color4);
+}
+
+.bb4-window {
+  width: 18%;
+  height: 90%;
+  background-color: var(--window-color4);
+}
+
+/* FOREGROUND BUILDINGS - "fb" stands for "foreground building" */
+
+.fb1 {
+  width: 10%;
+  height: 60%;
+}
+
+.fb1a {
+  /* This will put a 7vh height border on the bottom. But since the element has zero size, it only shows up as a 2px wide line from the 1px border that is on all the elements. */
+  border-bottom: 7vh solid var(--building-color4);
+
+  /* When you increase the size of the left and right borders, the border on the bottom will expand to be the width of the combined left and right border widths. Add 2vw solid transparent as the value of the border-left and border-right properties of .fb1a. They will be invisible, but it will make the border on the bottom 4vw wide */
+  border-left: 2vw solid transparent;
+  border-right: 2vw solid transparent;
+}
+
+.fb1b {
+  width: 60%;
+  height: 10%;
+  background-color: var(--building-color4);
+}
+
+.fb1c {
+  width: 100%;
+  height: 80%;
+  background: repeating-linear-gradient(
+      90deg,
+      var(--building-color4) 0%,
+      var(--building-color4) 10%,
+      transparent 10%,
+      transparent 15%
+    ),
+    /* You can add multiple gradients to an element by separating them with a comma (,) like this:
+
+gradient1(
+  colors
+),
+gradient2(
+  colors
+);
+This will fill in behind the gradient you added last. */
+      repeating-linear-gradient(
+        var(--building-color4) 0%,
+        var(--building-color4) 10%,
+        var(--window-color4) 10%,
+        var(--window-color4) 90%
+      );
+}
+
+.fb2 {
+  width: 10%;
+  height: 40%;
+}
+
+.fb2a {
+  width: 100%;
+
+  /* This border trick will create a trapezoid shape. */
+  border-bottom: 10vh solid var(--building-color3);
+  border-left: 1vw solid transparent;
+  border-right: 1vw solid transparent;
+}
+
+.fb2b {
+  width: 100%;
+  height: 75%;
+  background-color: var(--building-color3);
+}
+
+.fb2-window {
+  width: 22%;
+  height: 100%;
+  background-color: var(--window-color3);
+}
+.fb3 {
+  width: 10%;
+  height: 35%;
+}
+
+.fb3a {
+  width: 80%;
+  height: 15%;
+  background-color: var(--building-color1);
+}
+
+.fb3b {
+  width: 100%;
+  height: 35%;
+  background-color: var(--building-color1);
+}
+
+.fb3-window {
+  width: 25%;
+  height: 80%;
+  background-color: var(--window-color1);
+}
+
+.fb4 {
+  width: 8%;
+  height: 45%;
+
+  /* Move the position of .fb4 relative to where it is now by adding a position of relative and left of 10% to it */
+  position: relative;
+  left: 10%;
+}
+
+.fb4a {
+  border-top: 5vh solid transparent;
+  border-left: 8vw solid var(--building-color1);
+}
+
+.fb4b {
+  width: 100%;
+  height: 89%;
+  background-color: var(--building-color1);
+
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.fb4-window {
+  width: 30%;
+  height: 10%;
+  border-radius: 50%;
+  background-color: var(--window-color1);
+  margin: 10%;
+}
+
+.fb5 {
+  width: 10%;
+  height: 33%;
+
+  /* Move the position of .fb5 relative to where it is now and push it from the right by 10%. This will cover up the remaining white space in between the buildings. */
+  position: relative;
+  right: 10%;
+
+  background: repeating-linear-gradient(
+      var(--building-color2) 0%,
+      var(--building-color2) 5%,
+      transparent 5%,
+      transparent 10%
+    ),
+    /* This will make a bunch of rectangle windows. */
+      repeating-linear-gradient(
+        90deg,
+        var(--building-color2) 0%,
+        var(--building-color2) 12%,
+        var(--window-color2) 12%,
+        var(--window-color2) 44%
+      );
+}
+.fb6 {
+  width: 9%;
+  height: 38%;
+
+  background: repeating-linear-gradient(
+      90deg,
+      var(--building-color3) 0%,
+      var(--building-color3) 10%,
+      transparent 10%,
+      transparent 30%
+    ),
+    repeating-linear-gradient(
+      var(--building-color3) 0%,
+      var(--building-color3) 10%,
+      var(--window-color3) 10%,
+      var(--window-color3) 30%
+    );
+}
+
+@media (max-width: 1000px) {
+  :root {
+    --building-color1: #000;
+    --building-color2: #000;
+    --building-color3: #000;
+    --building-color4: #000;
+    --window-color1: #777;
+    --window-color2: #777;
+    --window-color3: #777;
+    --window-color4: #777;
+  }
+  .sky {
+    background: radial-gradient(
+      /* This will move the start of the gradient to 15% from the top and left. It will make it end at the closest-corner and it will maintain a circle shape. These are some keywords built into gradients to describe how it behaves. */
+        circle closest-corner at 15% 15%,
+
+      #ccc 0%,
+      #ccc 20%,
+      #445 21%,
+      #223 100%
+    );
+  }
+}
